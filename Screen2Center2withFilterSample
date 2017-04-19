@@ -1,0 +1,188 @@
+package com.neu.jan17.UI;
+
+import com.neu.jan17.data.Vehicle;
+import com.neu.jan17.search.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.net.URL;
+
+/**
+ * Created by kysft on 4/17/17.
+ */
+public class Screen2Center2 extends JFrame {
+
+    JPanel rightPanel,panelShow, panelData, panelPicture;
+    JButton viewDetails, jbpic;
+    ImageIcon icn;
+    JLabel titleLabel, priceLabel, typeLabel, categoryLabel;
+    String strTitle,strPrice,strType,strCateg,strUrl;
+    GridBagConstraints gc;
+    int triggerVD;
+
+    public Screen2Center2() {
+        //build the right panel
+        setSize(1200, 800);
+        setLocation(10, 10);
+        rightPanel = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, BorderLayout.CENTER);
+        scrollPane.setViewportView(rightPanel);
+        rightPanel.setBackground(new Color(127, 179, 213));
+        rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+
+        gc = new GridBagConstraints();
+        gc.insets = new Insets(3, 3, 2, 5);
+        gc.weightx = 0.5;
+        gc.weighty = 0.5;
+        gc.anchor = GridBagConstraints.CENTER;
+        rightPanel.setLayout(new GridBagLayout());
+    }
+    public void setVisible(){
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+    public void getStr(){
+
+    }
+    public void screen2centerAdd(java.util.List<Vehicle> results) {
+
+        for (int i = 0; i < results.size(); i++) {
+
+            strTitle = results.get(i).getId();
+            strPrice = "Price:" + i;
+            strType = "Type:" + i;
+            strCateg = "Categ:" + i;
+            strUrl = "http://inventory-dmg.assets-cdk.com/7/4/2/14055309247x90.jpg";
+
+            triggerVD = i;
+
+            viewDetails = new JButton("View Details");
+            viewDetails.setBackground(new Color(127, 179, 213));
+
+            titleLabel = new JLabel(strTitle);
+            titleLabel.setFont(new Font("Serif", Font.BOLD, 22));
+            priceLabel = new JLabel(strPrice);
+            priceLabel.setFont(new Font("Serif", Font.PLAIN, 18));
+            typeLabel = new JLabel(strType);
+            typeLabel.setFont(new Font("Serif", Font.PLAIN, 15));
+            categoryLabel = new JLabel(strCateg);
+            categoryLabel.setFont(new Font("Serif", Font.PLAIN, 15));
+
+            panelShow = new JPanel();
+            panelShow.setBackground(new Color(235, 245, 251));
+            panelShow.setPreferredSize(new Dimension(900, 120));
+            panelShow.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            panelData = new JPanel();
+            panelData.setBackground(new Color(235, 245, 251));
+            panelData.setPreferredSize(new Dimension(800, 120));
+            panelData.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            panelData.setBorder(BorderFactory.createRaisedBevelBorder());
+
+            panelPicture = new JPanel();
+            panelPicture.setBackground(new Color(235, 245, 251));
+            panelPicture.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            panelPicture.setBorder(BorderFactory.createRaisedBevelBorder());
+
+            int centerGridy = 8;
+            gc.gridx = 10;
+            gc.gridy = centerGridy + i * 2;
+            rightPanel.add(panelShow, gc);
+
+            GridBagConstraints gcShow = new GridBagConstraints();
+            gcShow.insets = new Insets(3, 3, 2, 5);
+            gcShow.weightx = 0.5;
+            gc.weighty = 0.5;
+            gcShow.anchor = GridBagConstraints.CENTER;
+            panelShow.setLayout(new GridBagLayout());
+
+            gcShow.gridx = 0;
+            gcShow.gridy = 0;
+            panelShow.add(panelPicture, gcShow);
+            gcShow.gridx = 1;
+            gcShow.gridy = 0;
+            panelShow.add(panelData, gcShow);
+
+            try {
+                URL url = new URL(strUrl);
+                icn = new ImageIcon(url);
+                jbpic = new JButton(icn);
+                jbpic.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+                //jbpic.setBorder(BorderFactory.createEtchedBorder());
+                jbpic.setPreferredSize(new Dimension(90, 70));
+                panelPicture.add(jbpic);
+            } catch (Exception e) {
+            }
+
+            panelData.setLayout(new GridBagLayout());
+            GridBagConstraints newgc = new GridBagConstraints();
+            newgc.anchor = GridBagConstraints.LAST_LINE_START;
+            newgc.insets = new Insets(2, 80, 4, 2);
+
+            int gcGridy = 5;
+            newgc.gridx = 1;
+            newgc.gridy = gcGridy + i;
+            panelData.add(titleLabel, newgc);
+            newgc.gridx = 2;
+            newgc.gridy = gcGridy + i;
+            panelData.add(priceLabel, newgc);
+            newgc.gridx = 2;
+            newgc.gridy = gcGridy + i + 1;
+            panelData.add(typeLabel, newgc);
+            newgc.gridx = 2;
+            newgc.gridy = gcGridy + i + 2;
+            panelData.add(categoryLabel, newgc);
+            newgc.anchor = GridBagConstraints.LAST_LINE_END;
+            newgc.gridx = 4;
+            newgc.gridy = gcGridy + i;
+            panelData.add(viewDetails, newgc);
+
+        }
+    }
+    public void screen2Delete() {
+
+    }
+
+    public Filter parseValue(String year) {
+//        if(year == "<<2014") return new RangeFilter("year", Integer.MIN_VALUE, 2014);
+        if (year.indexOf("<") >= 0) {
+            return new RangeFilter("year", Integer.MIN_VALUE, Integer.parseInt(year));
+        } else if(year.indexOf(">") >= 0) {
+            return new RangeFilter("year", Integer.parseInt(year)+1, Integer.MAX_VALUE);
+        } else {
+            return new LiteralFilter("year", Integer.parseInt(year));
+        }
+    }
+
+
+
+
+    public static void main(String[] args) throws Exception {
+        Screen2Center2 s2l = new Screen2Center2();
+        SearchTool st = new SearchTool("data");
+        java.util.List<Vehicle> results = null;
+
+        java.util.List<Filter> filters = new java.util.ArrayList<Filter>();
+        Filter f1 = new RangeFilter("year", 2005, 2012);
+        filters.add(f1);
+        Filter f2 = new LiteralFilter("model", "CTS Sedan");
+        filters.add(f2);
+
+        if(st.searchByFilters(filters)) {
+            results = st.getResult();
+            if(st.searchByKeyWord(results, "keasda")) {
+
+            }
+            System.out.println(results.size());
+            s2l.screen2centerAdd(results);
+            s2l.setVisible();
+        }
+
+    }
+}
+
+
+
+
