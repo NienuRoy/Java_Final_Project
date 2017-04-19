@@ -48,7 +48,7 @@ public class Screen2Center2 extends JFrame {
     }
     public void screen2centerAdd(java.util.List<Vehicle> results) {
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < results.size(); i++) {
 
             strTitle = results.get(i).getId();
             strPrice = "Price:" + i;
@@ -153,7 +153,7 @@ public class Screen2Center2 extends JFrame {
         SearchTool st = new SearchTool("data");
         java.util.List<Vehicle> results = null;
         if(st.searchByKeyWord("doh")) {
-            results = st.getResult();
+            results = st.getResult(0,20);
             System.out.println(results.size());
             s2l.screen2centerAdd(results);
             s2l.setVisible();
